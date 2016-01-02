@@ -127,11 +127,13 @@ doInstall() {
   action "Added +x flag for script" \
          "chmod" "+x" "/usr/bin/mkcryptpasswd"
 
+  cp SOURCES/mkcryptpasswd.8 .
+
   action "Created man page" \
-         "gzip" "-c" "SOURCES/mkcryptpasswd.8"
+         "gzip" "mkcryptpasswd.8"
 
   action "Man page moved to man dir" \
-         "mv" "SOURCES/mkcryptpasswd.8.gz" "/usr/share/man/man8/"
+         "mv" "mkcryptpasswd.8.gz" "/usr/share/man/man8/"
 
   congratulate "mcryptpasswd"
 }
