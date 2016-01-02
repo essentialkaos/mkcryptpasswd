@@ -1,6 +1,6 @@
 ### mcryptpasswd
 
-`mcryptpasswd` is utility for encrypting passwd compatible passwords.
+`mcryptpasswd` is utility for encrypting passwd compatible passwords (can be used for /etc/shadow file).
 
 #### Installation
 

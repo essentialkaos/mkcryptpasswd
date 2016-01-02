@@ -21,8 +21,7 @@ Provides:        %{name} = %{version}-%{release}
 ###############################################################################
 
 %description
-Utility for generate encrypted passwords (can be used
-for /etc/shadow file)
+Utility for generating encrypted passwords (can be used for /etc/shadow file)
 
 ###############################################################################
 
