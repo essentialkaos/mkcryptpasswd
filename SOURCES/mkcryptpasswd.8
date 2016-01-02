@@ -1,0 +1,72 @@
+.\" Manpage for mkcryptpasswd
+
+.TH MKCRYPTPASSWD 8 "2 Jan 2016" "mkcryptpasswd 1.5.0" "mkcryptpasswd Manual"
+
+.SH NAME 
+
+\fBmkcryptpasswd\fP \- utility for encrypting passwords
+
+.SH SYNOPSIS
+
+mkcryptpasswd 
+.I [option] 
+.I [password]
+
+.SH AVAILABILITY
+
+All UNIX flavors 
+
+.SH DESCRIPTION
+
+\fBmkcryptpasswd\fP is a utility for encrypting passwords. Passwords
+generated with this utility you can be used in /etc/shadow file or with 
+chpasswd utility.
+
+.SH OPTIONS
+
+.TP
+.B --MD5, -1
+Generate password encrypted by MD5 algorithm
+
+.TP
+.B --SHA256, -5
+Generate password encrypted by SHA algorithm with 256 bits digests
+
+.TP
+.B --SHA512, -6
+Generate password encrypted by SHA algorithm with 512 bits digests (default)
+
+.TP
+.B --strong, -s
+Return error if password is too weak
+
+.TP
+.B --stdin, -S
+Read password from stdin
+
+.TP
+.B --salt, -sa
+Salt
+
+.TP
+.B --salt-length, -sl
+Salt length (4-16, 8 by default)
+
+.TP
+.B --version, -v
+Show information about version
+
+.TP
+.B --help, -h
+Show help message
+
+.SH BUGS
+.PD 0
+Please send any comments or bug reports to <\fBopensource@essentialkaos.com\fP>.
+
+.SH LICENSE
+Essential Kaos Open Source License <\fBhttps://essentialkaos.com/ekol?en\fP>
+
+.SH AUTHOR
+
+\fBAnton Novojilov\fP <\fBandy@essentialkaos.com\fP>
