@@ -103,11 +103,11 @@ main() {
     salt_length=$MAX_SALT_LENGTH
   fi
 
-  calculate $@
+  calculate "$@"
 }
 
 calculate() {
-  local password
+  local password now pass_hash
 
   if [[ -z "$salt" ]] ; then
     salt=$(mktemp -u "${SALT_TEMP:0:$salt_length}")
@@ -128,9 +128,9 @@ calculate() {
     while : ; do
       show "Please enter password:" $CYAN
 
-      local now=$(date +%s)
+      now=$(date +%s)
 
-      read -p "> " password
+      read -r -p "> " password
 
       # If stdin present, we read it immediately
       # In this case we need additional line
@@ -155,7 +155,7 @@ calculate() {
     method=5
   fi
 
-  local pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
+  pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
 
   if [[ -n "$stdin" ]] ; then
     show "$pass_hash"
@@ -167,7 +167,9 @@ calculate() {
 isWellPassword() {
   [[ -z "$strong" ]] && return 0
 
-  local password_info=$(getPasswordInfo "$1")
+  local password_info
+  
+  password_info=$(getPasswordInfo "$1")
 
   if [[ "$password_info" != "OK" ]] ; then
     if [[ -z "$stdin" ]] ; then
