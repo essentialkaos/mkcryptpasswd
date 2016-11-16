@@ -6,6 +6,10 @@ engines:
         enabled: false
       SC2154:
         enabled: false
+      SC1090:
+        enabled: false
+      SC2015:
+        enabled: false
 
 ratings:
    paths:
