@@ -16,6 +16,7 @@
 ```
 [sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-7.0-0.el7.noarch.rpm
 [sudo] yum install mcryptpasswd
+```
 
 ##### Using install.sh
 
