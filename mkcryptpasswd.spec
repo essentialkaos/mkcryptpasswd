@@ -52,6 +52,7 @@ rm -rf %{buildroot}
 %changelog
 * Wed Nov 16 2016 Anton Novojilov <andy@essentialkaos.com> - 1.6.0-0
 - Code refactoring
+- Improved usage output
 
 * Sat Jan 02 2016 Anton Novojilov <andy@essentialkaos.com> - 1.5.0-0
 - Minor fixes and improvements 
