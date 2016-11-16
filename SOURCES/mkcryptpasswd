@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 APP="MkCryptPasswd"
-VER="1.5.0"
+VER="1.6.0"
 
 ###############################################################################
 
@@ -15,6 +15,7 @@ BLUE=34
 MAG=35
 CYAN=36
 GREY=37
+DARK=90
 
 CL_NORM="\e[${NORM}m"
 CL_BOLD="\e[${BOLD}m"
@@ -26,6 +27,7 @@ CL_BLUE="\e[${BLUE}m"
 CL_MAG="\e[${MAG}m"
 CL_CYAN="\e[${CYAN}m"
 CL_GREY="\e[${GREY}m"
+CL_DARK="\e[${DARK}m"
 CL_BL_RED="\e[${RED};1m"
 CL_BL_GREEN="\e[${GREEN};1m"
 CL_BL_BROWN="\e[${BROWN};1m"
@@ -33,6 +35,7 @@ CL_BL_BLUE="\e[${BLUE};1m"
 CL_BL_MAG="\e[${MAG};1m"
 CL_BL_CYAN="\e[${CYAN};1m"
 CL_BL_GREY="\e[${GREY};1m"
+CL_BL_DARK="\e[${DARK};1m"
 CL_UL_RED="\e[${RED};4m"
 CL_UL_GREEN="\e[${GREEN};4m"
 CL_UL_BROWN="\e[${BROWN};4m"
@@ -40,6 +43,7 @@ CL_UL_BLUE="\e[${BLUE};4m"
 CL_UL_MAG="\e[${MAG};4m"
 CL_UL_CYAN="\e[${CYAN};4m"
 CL_UL_GREY="\e[${GREY};4m"
+CL_UL_DARK="\e[${DARK};4m"
 CL_BG_RED="\e[${RED};7m"
 CL_BG_GREEN="\e[${GREEN};7m"
 CL_BG_BROWN="\e[${BROWN};7m"
@@ -47,6 +51,7 @@ CL_BG_BLUE="\e[${BLUE};7m"
 CL_BG_MAG="\e[${MAG};7m"
 CL_BG_CYAN="\e[${CYAN};7m"
 CL_BG_GREY="\e[${GREY};7m"
+CL_BG_DARK="\e[${DARK};7m"
 
 ###############################################################################
 
@@ -56,10 +61,10 @@ MIN_SALT_LENGTH=4
 MAX_SALT_LENGTH=32
 
 SUPPORTED_ARGS="!version !ver !help !usage !stdin !strong 
- !MD5 !SHA256 !SHA512 salt salt_length"
+ !MD5 !SHA256 !SHA512 salt salt_length !no_colors"
 
 SHORT_ARGS="v:!version h:!help sa:salt sl:salt_length 
- s:!strong S:!stdin 1:!MD5 5:!SHA256 6:!SHA512"
+ s:!strong S:!stdin 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
 
 method=6
 salt_length=8
@@ -67,6 +72,14 @@ salt_length=8
 ###############################################################################
 
 main() {
+  if [[ ! -t 1 || -n "$no_colors" ]] ; then
+    unset NORM BOLD UNLN RED GREEN BROWN BLUE MAG CYAN GREY DARK
+    unset CL_NORM CL_BOLD CL_UNLN CL_RED CL_GREEN CL_BROWN CL_BLUE CL_MAG CL_CYAN CL_GREY CL_DARK
+    unset CL_BL_RED CL_BL_GREEN CL_BL_BROWN CL_BL_BLUE CL_BL_MAG CL_BL_CYAN CL_BL_GREY CL_BL_DARK
+    unset CL_UL_RED CL_UL_GREEN CL_UL_BROWN CL_UL_BLUE CL_UL_MAG CL_UL_CYAN CL_UL_GREY CL_UL_DARK
+    unset CL_BG_RED CL_BG_GREEN CL_BG_BROWN CL_BG_BLUE CL_BG_MAG CL_BG_CYAN CL_BG_GREY CL_BG_DARK
+  fi
+
   if [[ -n "$help" || -n "$usage" ]] ; then
     usage
     exit 0
@@ -90,11 +103,11 @@ main() {
     salt_length=$MAX_SALT_LENGTH
   fi
 
-  calculate $@
+  calculate "$@"
 }
 
 calculate() {
-  local password
+  local password now pass_hash
 
   if [[ -z "$salt" ]] ; then
     salt=$(mktemp -u "${SALT_TEMP:0:$salt_length}")
@@ -115,9 +128,9 @@ calculate() {
     while : ; do
       show "Please enter password:" $CYAN
 
-      local now=$(date +%s)
+      now=$(date +%s)
 
-      read -p "> " password
+      read -r -p "> " password
 
       # If stdin present, we read it immediately
       # In this case we need additional line
@@ -142,7 +155,7 @@ calculate() {
     method=5
   fi
 
-  local pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
+  pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
 
   if [[ -n "$stdin" ]] ; then
     show "$pass_hash"
@@ -154,7 +167,9 @@ calculate() {
 isWellPassword() {
   [[ -z "$strong" ]] && return 0
 
-  local password_info=$(getPasswordInfo "$1")
+  local password_info
+  
+  password_info=$(getPasswordInfo "$1")
 
   if [[ "$password_info" != "OK" ]] ; then
     if [[ -z "$stdin" ]] ; then
@@ -172,8 +187,8 @@ getPasswordInfo() {
 }
 
 checkDeps () {
-  for app in $@ ; do
-    type -P $app &> /dev/null
+  for app in "$@" ; do
+    type -P "$app" &> /dev/null
     [[ $? -eq 1 ]] && return 1
   done
 
@@ -185,7 +200,7 @@ clnPassInput() {
 
   result="${result}> "
 
-  for i in $(seq 1 $1) ; do
+  for i in $(seq 1 "$1") ; do
     result="${result}*"
   done
 
@@ -197,10 +212,10 @@ clnPassInput() {
 show() {
   [[ -n "$silent" ]] && return
 
-  if [[ -n "$2" ]] ; then
-    echo -e "\e[${2}m${1}${CL_NORM}"
+  if [[ -n "$2" && -z "$no_colors" ]] ; then
+    echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$@"
+    echo -e "$*"
   fi
 }
 
@@ -210,26 +225,42 @@ showArgWarn() {
 }
 
 usage() {
-  show "${CL_BOLD}Usage:${CL_NORM} mkcryptpasswd ${CL_GREEN}<option>${CL_NORM}"
-  show " "
-  show "${CL_BOLD}Options:${CL_NORM} "
-  show "  ${CL_GREEN}--MD5, -1${CL_NORM}                 Generate password hash by MD5 algorithm"
-  show "  ${CL_GREEN}--SHA256, -5${CL_NORM}              Generate password hash by SHA algorithm with 256 bits digests"
-  show "  ${CL_GREEN}--SHA512, -6${CL_NORM}              Generate password hash by SHA algorithm with 512 bits digests (default)"
-  show "  ${CL_GREEN}--stdin, -s${CL_NORM}               Read password from stdin"
-  show "  ${CL_GREEN}--strong, -S${CL_NORM}              Return error if password is too weak"
-  show "  ${CL_GREEN}--salt, -sa${CL_NORM}               Salt"
-  show "  ${CL_GREEN}--salt-length, -sl${CL_NORM}        Generated salt length (4-16, 8 by default)"
-  show "  ${CL_GREEN}--version, --ver, -v${CL_NORM}      Show information about version"
-  show "  ${CL_GREEN}--help, --usage, -h${CL_NORM}       Show this help message"
+  show ""
+  show "${CL_BOLD}Usage:${CL_NORM} mkcryptpasswd ${CL_GREEN}{option}${CL_NORM}"
+  show ""
+  show "Options" $BOLD
+  show ""
+  if [[ -n "$DARK" ]] ; then
+    show "  ${CL_GREEN}--MD5, -1${CL_NORM} ${CL_DARK}...........${CL_NORM} Generate password hash by MD5 algorithm"
+    show "  ${CL_GREEN}--SHA256, -5${CL_NORM} ${CL_DARK}........${CL_NORM} Generate password hash by SHA algorithm with 256 bits digests"
+    show "  ${CL_GREEN}--SHA512, -6${CL_NORM} ${CL_DARK}........${CL_NORM} Generate password hash by SHA algorithm with 512 bits digests ${CL_DARK}(default)${CL_NORM}"
+    show "  ${CL_GREEN}--stdin, -s${CL_NORM} ${CL_DARK}.........${CL_NORM} Read password from stdin"
+    show "  ${CL_GREEN}--strong, -S${CL_NORM} ${CL_DARK}........${CL_NORM} Return error if password is too weak"
+    show "  ${CL_GREEN}--salt, -sa${CL_NORM} ${CL_DARK}.........${CL_NORM} Salt"
+    show "  ${CL_GREEN}--salt-length, -sl${CL_NORM} ${CL_DARK}..${CL_NORM} Generated salt length ${CL_DARK}(4-16, 8 by default)${CL_NORM}"
+    show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}.......${CL_NORM} Show information about version"
+    show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}..........${CL_NORM} Show this help message"
+  else
+    show "  ${CL_GREEN}--MD5, -1${CL_NORM}             Generate password hash by MD5 algorithm"
+    show "  ${CL_GREEN}--SHA256, -5${CL_NORM}          Generate password hash by SHA algorithm with 256 bits digests"
+    show "  ${CL_GREEN}--SHA512, -6${CL_NORM}          Generate password hash by SHA algorithm with 512 bits digests (default)"
+    show "  ${CL_GREEN}--stdin, -s${CL_NORM}           Read password from stdin"
+    show "  ${CL_GREEN}--strong, -S${CL_NORM}          Return error if password is too weak"
+    show "  ${CL_GREEN}--salt, -sa${CL_NORM}           Salt"
+    show "  ${CL_GREEN}--salt-length, -sl${CL_NORM}    Generated salt length (4-16, 8 by default)"
+    show "  ${CL_GREEN}--version, -v${CL_NORM}         Show information about version"
+    show "  ${CL_GREEN}--help, -h${CL_NORM}            Show this help message"
+  fi
   show ""
 }
 
 about() {
+  show ""
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for password hashing"
   show ""
-  show "Copyright (C) 2009-2016 Essential Kaos" $BOLD
-  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol?en>" $BOLD
+  show "Copyright (C) 2009-2016 ESSENTIAL KAOS" $DARK
+  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol>" $DARK
+  show ""
 }
 
 ## ARGUMENTS PARSING 2 #################################################################
@@ -242,7 +273,7 @@ argv="$*" ; argt=""
 
 while [[ -n "$1" ]] ; do
   if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare $argn="$1"
+    declare "$argn=$1"
 
     unset argn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
@@ -258,7 +289,7 @@ while [[ -n "$1" ]] ; do
     if [[ -z "$argn" ]] ; then
       argn=$arg
     else
-      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
       argn=$arg
     fi
 
@@ -268,7 +299,7 @@ while [[ -n "$1" ]] ; do
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare $argn=true ; unset argn ; argk=true
+      declare "$argn=true" ; unset argn ; argk=true
     else
       unset argk
     fi
@@ -287,7 +318,7 @@ while [[ -n "$1" ]] ; do
         shift && continue
       fi
 
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare $argm="${!argm} ${arg[@]:1:99}" || declare $argm="${arg[@]:1:99}"
+      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[@]:1:99}" || declare "$argm=${arg[@]:1:99}"
 
       unset argm && shift && continue
     else
@@ -296,7 +327,7 @@ while [[ -n "$1" ]] ; do
       if [[ -z "$argn" ]] ; then
         argn=$arg
       else
-        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
         argn=$arg
       fi
 
@@ -306,7 +337,7 @@ while [[ -n "$1" ]] ; do
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare $argn=true ; unset argn ; argk=true
+        declare "$argn=true" ; unset argn ; argk=true
       else
         unset argk
       fi
@@ -315,7 +346,7 @@ while [[ -n "$1" ]] ; do
     fi
   else
     if [[ -n "$argn" ]] ; then
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare $argn="${!argn} $1" || declare $argn="$1"
+      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
 
       unset argn && shift && continue
     fi
@@ -325,7 +356,7 @@ while [[ -n "$1" ]] ; do
 
 done
 
-[[ -n "$argn" ]] && declare $argn=true
+[[ -n "$argn" ]] && declare "$argn=true"
 
 unset arg argn argm argk
 

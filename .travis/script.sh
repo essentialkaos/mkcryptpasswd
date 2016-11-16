@@ -103,11 +103,11 @@ main() {
 # Code: No
 # Echo: No
 testHashLen() {
-  local hash1=$(echo "$PASSWORD" | . $MKCP -1 -S)
-  local hash5=$(echo "$PASSWORD" | . $MKCP -5 -S)
-  local hash6=$(echo "$PASSWORD" | . $MKCP -6 -S)
+  local hash1 hash5 hash6 has_errors
 
-  local has_errors
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S)
 
   [[ ${#hash1} -ne 34 ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ ${#hash5} -ne 55 ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -115,11 +115,11 @@ testHashLen() {
 
   if [[ $has_errors ]] ; then
     global_errors=true
-    show " ERROR" $RED
+    show " ✘ " $RED
     return
   fi
 
-  show " OK" $GREEN
+  show " ✔ " $GREEN
 }
 
 # Check salt usage
@@ -127,15 +127,15 @@ testHashLen() {
 # Code: No
 # Echo: No
 testHashSalt() {
-  local hash1=$(echo "$PASSWORD" | . $MKCP -1 -S -sa "$SALT")
-  local hash5=$(echo "$PASSWORD" | . $MKCP -5 -S -sa "$SALT")
-  local hash6=$(echo "$PASSWORD" | . $MKCP -6 -S -sa "$SALT")
-  
-  local hash1S=$(extractSalt "$hash1")
-  local hash5S=$(extractSalt "$hash5")
-  local hash6S=$(extractSalt "$hash6")
+  local hash1 hash5 hash6 hash1S hash5S hash6S has_errors
 
-  local has_errors
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sa "$SALT")
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sa "$SALT")
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sa "$SALT")
+  
+  hash1S=$(extractSalt "$hash1")
+  hash5S=$(extractSalt "$hash5")
+  hash6S=$(extractSalt "$hash6")
 
   [[ "$SALT" != "$hash1S" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ "$SALT" != "$hash5S" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -143,11 +143,11 @@ testHashSalt() {
 
   if [[ $has_errors ]] ; then
     global_errors=true
-    show " ERROR" $RED
+    show " ✘ " $RED
     return
   fi
 
-  show " OK" $GREEN
+  show " ✔ " $GREEN
 }
 
 # Check generated salt length
@@ -155,15 +155,15 @@ testHashSalt() {
 # Code: No
 # Echo: No
 testHashSaltLength() {
-  local hash1=$(echo "$PASSWORD" | . $MKCP -1 -S -sl $SALT_LENGTH)
-  local hash5=$(echo "$PASSWORD" | . $MKCP -5 -S -sl $SALT_LENGTH)
-  local hash6=$(echo "$PASSWORD" | . $MKCP -6 -S -sl $SALT_LENGTH)
+  local hash1 hash5 hash6 hash1S hash5S hash6S has_errors
 
-  local hash1S=$(extractSalt "$hash1")
-  local hash5S=$(extractSalt "$hash5")
-  local hash6S=$(extractSalt "$hash6")
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sl $SALT_LENGTH)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl $SALT_LENGTH)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sl $SALT_LENGTH)
 
-  local has_errors
+  hash1S=$(extractSalt "$hash1")
+  hash5S=$(extractSalt "$hash5")
+  hash6S=$(extractSalt "$hash6")
 
   [[ ${#hash1S} -ne $SALT_LENGTH ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ ${#hash5S} -ne $SALT_LENGTH ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -171,11 +171,11 @@ testHashSaltLength() {
 
   if [[ $has_errors ]] ; then
     global_errors=true
-    show " ERROR" $RED
+    show " ✘ " $RED
     return
   fi
 
-  show " OK" $GREEN
+  show " ✔ " $GREEN
 }
 
 # Check salt max/min values
@@ -183,15 +183,15 @@ testHashSaltLength() {
 # Code: No
 # Echo: No
 testHashSaltMinMax() {
-  local hashS=$(echo "$PASSWORD" | . $MKCP -5 -S -sl 2)
-  local hashB1=$(echo "$PASSWORD" | . $MKCP -1 -S -sl 60)
-  local hashB5=$(echo "$PASSWORD" | . $MKCP -5 -S -sl 60)
+  local hashS hashB1 hashB5 hashSS hashB1S hashB5S has_errors
 
-  local hashSS=$(extractSalt "$hashS")
-  local hashB1S=$(extractSalt "$hashB1")
-  local hashB5S=$(extractSalt "$hashB5")
+  hashS=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl 2)
+  hashB1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sl 60)
+  hashB5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl 60)
 
-  local has_errors
+  hashSS=$(extractSalt "$hashS")
+  hashB1S=$(extractSalt "$hashB1")
+  hashB5S=$(extractSalt "$hashB5")
 
   [[ ${#hashSS} -ne 4   ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ ${#hashB1S} -ne 8  ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -199,11 +199,11 @@ testHashSaltMinMax() {
 
   if [[ $has_errors ]] ; then
     global_errors=true
-    show " ERROR" $RED
+    show " ✘ " $RED
     return
   fi
 
-  show " OK" $GREEN
+  show " ✔ " $GREEN
 }
 
 # Check hashing result
@@ -211,17 +211,19 @@ testHashSaltMinMax() {
 # Code: No
 # Echo: No
 testHashResult() {
-  local hash1=$(echo "$PASSWORD" | . $MKCP -1 -S)
-  local hash5=$(echo "$PASSWORD" | . $MKCP -5 -S)
-  local hash6=$(echo "$PASSWORD" | . $MKCP -6 -S)
+  local hash1 hash5 hash6 hash1S hash5S hash6S hash1R hash5R hash6R
 
-  local hash1S=$(extractSalt "$hash1")
-  local hash5S=$(extractSalt "$hash5")
-  local hash6S=$(extractSalt "$hash6")
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S)
 
-  local hash1R=$(echo "$PASSWORD" | . $MKCP -1 -S -sa "$hash1S")
-  local hash5R=$(echo "$PASSWORD" | . $MKCP -5 -S -sa "$hash5S")
-  local hash6R=$(echo "$PASSWORD" | . $MKCP -6 -S -sa "$hash6S")
+  hash1S=$(extractSalt "$hash1")
+  hash5S=$(extractSalt "$hash5")
+  hash6S=$(extractSalt "$hash6")
+
+  hash1R=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sa "$hash1S")
+  hash5R=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sa "$hash5S")
+  hash6R=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sa "$hash6S")
 
   [[ "$hash1" != "$hash1R" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ "$hash5" != "$hash5R" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -229,11 +231,11 @@ testHashResult() {
 
   if [[ $has_errors ]] ; then
     global_errors=true
-    show " ERROR" $RED
+    show " ✘ " $RED
     return
   fi
 
-  show " OK" $GREEN
+  show " ✔ " $GREEN
 }
 
 # Extract salt from hashed password
@@ -246,16 +248,6 @@ extractSalt() {
   echo "$1" | cut -f3 -d"$"
 }
 
-# Check hashed password
-#
-# 1: Hashed password (String)
-#
-# Code: Yes
-# Echo: No
-# checkHash() {
-#   local pswd_hash="$1"
-# }
-
 # Show message
 #
 # 1: Message (String)
@@ -265,9 +257,9 @@ extractSalt() {
 # Echo: No
 show() {
   if [[ -n "$2" ]] ; then
-    echo -e "\e[${2}m${1}${CL_NORM}"
+    echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$@"
+    echo -e "$*"
   fi
 }
 
@@ -279,13 +271,13 @@ show() {
 # Code: No
 # Echo: No
 showm() {
-  if [[ -n "$2" && -z "$no_colors" ]] ; then
-    printf "\e[${2}m${1}\e[0m"
+  if [[ -n "$2" ]] ; then
+    echo -e -n "\e[${2}m${1}\e[0m"
   else
-    printf "$@"
+    echo -e -n "$*"
   fi
 }
 
 ########################################################################################
 
-main $@
+main "$@"
