@@ -2,7 +2,7 @@
 
 Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
-Version:         1.6.0
+Version:         1.6.1
 Release:         0%{?dist}
 License:         EKOL
 Group:           Applications/System
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Wed Feb 15 2017 Anton Novojilov <andy@essentialkaos.com> - 1.6.1-0
+- Improved version output
+
 * Wed Nov 16 2016 Anton Novojilov <andy@essentialkaos.com> - 1.6.0-0
 - Code refactoring
 - Improved usage output
