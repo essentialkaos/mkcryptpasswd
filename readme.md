@@ -4,21 +4,24 @@
 
 ### Installation
 
-##### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
-
+<details>
+<summary><strong>From ESSENTIAL KAOS Public repo for RHEL6/CentOS6</strong></summary>
 ```
 [sudo] yum install -y https://yum.kaos.io/6/release/i386/kaos-repo-7.0-0.el6.noarch.rpm
 [sudo] yum install mcryptpasswd
 ```
+</details>
 
-##### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
-
+<details>
+<summary><strong>From ESSENTIAL KAOS Public repo for RHEL7/CentOS7</strong></summary>
 ```
 [sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-7.0-0.el7.noarch.rpm
 [sudo] yum install mcryptpasswd
 ```
+</details>
 
-##### Using install.sh
+<details>
+<summary><strong>Using install.sh</strong></summary>
 
 We provide simple bash script `script.sh` for installing app from the sources.
 
@@ -36,6 +39,7 @@ If you have some issues with installing, try to use script in debug mode:
 ```
 sudo ./install.sh --debug
 ```
+</details>
 
 ### Usage
 
@@ -58,10 +62,10 @@ Options
 
 ### Build Status
 
-| Repository | Status |
+| Branch | Status |
 |------------|--------|
-| Stable | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
-| Unstable | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
+| `master` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
+| `develop` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
 
 ### License
 
