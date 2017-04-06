@@ -1,4 +1,4 @@
-## mcryptpasswd [![Code Climate](https://codeclimate.com/github/essentialkaos/mkcryptpasswd/badges/gpa.svg)](https://codeclimate.com/github/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
+# mcryptpasswd [![Code Climate](https://codeclimate.com/github/essentialkaos/mkcryptpasswd/badges/gpa.svg)](https://codeclimate.com/github/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
 
 `mcryptpasswd` is utility for encrypting passwd compatible passwords (can be used for `/etc/shadow` file).
 
