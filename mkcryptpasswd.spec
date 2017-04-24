@@ -52,7 +52,7 @@ rm -rf %{buildroot}
 %changelog
 * Mon Apr 24 2017 Anton Novojilov <andy@essentialkaos.com> - 1.6.3-0
 - Arguments parser updated to v3 with fixed stderr output redirection for
- showArgWarn and showArgValWarn functions
+  showArgWarn and showArgValWarn functions
 
 * Thu Apr 06 2017 Anton Novojilov <andy@essentialkaos.com> - 1.6.2-0
 - Output errors to stderr
