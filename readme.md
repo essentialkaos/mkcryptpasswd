@@ -59,10 +59,12 @@ Options
 ### Build Status
 
 | Branch | Status |
-|------------|--------|
+|--------|--------|
 | `master` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
 | `develop` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
 
 ### License
 
 [EKOL](https://essentialkaos.com/ekol)
+
+<p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.io/ekgh.svg"/></a></p>
