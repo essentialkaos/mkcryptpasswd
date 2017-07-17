@@ -2,7 +2,7 @@
 
 Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
-Version:         1.6.3
+Version:         1.7.0
 Release:         0%{?dist}
 License:         EKOL
 Group:           Applications/System
@@ -50,6 +50,11 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Tue Jul 18 2017 Anton Novojilov <andy@essentialkaos.com> - 1.7.0-0
+- Fixed bug with options naming
+- Short option for stdin set to -- (was -s)
+- Added limit for errors (3)
+
 * Mon Apr 24 2017 Anton Novojilov <andy@essentialkaos.com> - 1.6.3-0
 - Arguments parser updated to v3 with fixed stderr output redirection for
   showArgWarn and showArgValWarn functions
