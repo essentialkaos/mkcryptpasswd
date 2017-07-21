@@ -47,7 +47,7 @@ Options
   --MD5, -1             Generate password hash by MD5 algorithm
   --SHA256, -5          Generate password hash by SHA algorithm with 256 bits digests
   --SHA512, -6          Generate password hash by SHA algorithm with 512 bits digests (default)
-  --stdin, -s           Read password from stdin
+  --stdin, --           Read password from stdin
   --strong, -S          Return error if password is too weak
   --salt, -sa           Salt
   --salt-length, -sl    Generated salt length (4-16, 8 by default)

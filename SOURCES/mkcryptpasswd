@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 APP="MkCryptPasswd"
-VER="1.6.3"
+VER="1.7.0"
 
 ###############################################################################
 
@@ -47,7 +47,7 @@ SUPPORTED_ARGS="!version !ver !help !usage !stdin !strong
  !MD5 !SHA256 !SHA512 salt salt_length !no_colors"
 
 SHORT_ARGS="v:!version h:!help sa:salt sl:salt_length 
- s:!strong S:!stdin 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
+ S:!strong 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
 
 method=6
 salt_length=8
@@ -84,11 +84,15 @@ main() {
     salt_length=$MAX_SALT_LENGTH
   fi
 
+  if [[ "$*" == "--" ]] ; then
+    stdin=true
+  fi
+
   calculate "$@"
 }
 
 calculate() {
-  local password now pass_hash
+  local password now pass_hash error_num
 
   if [[ -z "$salt" ]] ; then
     salt=$(mktemp -u "${SALT_TEMP:0:$salt_length}")
@@ -107,6 +111,10 @@ calculate() {
     fi
   else
     while : ; do
+      if [[ $error_num -eq 3 ]] ; then
+        exit 1
+      fi
+
       show "Please enter password:" $CYAN
 
       now=$(date +%s)
@@ -123,11 +131,14 @@ calculate() {
         show ""
         error "Password can't be empty!" $YELLOW
         show ""
+        (( error_num++ ))
         continue
       fi
 
       if isWellPassword "$password" ; then
         break
+      else
+        (( error_num++ ))
       fi
     done
   fi
@@ -221,7 +232,7 @@ usage() {
     show "  ${CL_GREEN}--MD5, -1${CL_NORM} ${CL_DARK}...........${CL_NORM} Generate password hash by MD5 algorithm"
     show "  ${CL_GREEN}--SHA256, -5${CL_NORM} ${CL_DARK}........${CL_NORM} Generate password hash by SHA algorithm with 256 bits digests"
     show "  ${CL_GREEN}--SHA512, -6${CL_NORM} ${CL_DARK}........${CL_NORM} Generate password hash by SHA algorithm with 512 bits digests ${CL_DARK}(default)${CL_NORM}"
-    show "  ${CL_GREEN}--stdin, -s${CL_NORM} ${CL_DARK}.........${CL_NORM} Read password from stdin"
+    show "  ${CL_GREEN}--stdin, --${CL_NORM} ${CL_DARK}.........${CL_NORM} Read password from stdin"
     show "  ${CL_GREEN}--strong, -S${CL_NORM} ${CL_DARK}........${CL_NORM} Return error if password is too weak"
     show "  ${CL_GREEN}--salt, -sa${CL_NORM} ${CL_DARK}.........${CL_NORM} Salt"
     show "  ${CL_GREEN}--salt-length, -sl${CL_NORM} ${CL_DARK}..${CL_NORM} Generated salt length ${CL_DARK}(4-16, 8 by default)${CL_NORM}"
@@ -231,7 +242,7 @@ usage() {
     show "  ${CL_GREEN}--MD5, -1${CL_NORM}             Generate password hash by MD5 algorithm"
     show "  ${CL_GREEN}--SHA256, -5${CL_NORM}          Generate password hash by SHA algorithm with 256 bits digests"
     show "  ${CL_GREEN}--SHA512, -6${CL_NORM}          Generate password hash by SHA algorithm with 512 bits digests (default)"
-    show "  ${CL_GREEN}--stdin, -s${CL_NORM}           Read password from stdin"
+    show "  ${CL_GREEN}--stdin, --${CL_NORM}           Read password from stdin"
     show "  ${CL_GREEN}--strong, -S${CL_NORM}          Return error if password is too weak"
     show "  ${CL_GREEN}--salt, -sa${CL_NORM}           Salt"
     show "  ${CL_GREEN}--salt-length, -sl${CL_NORM}    Generated salt length (4-16, 8 by default)"

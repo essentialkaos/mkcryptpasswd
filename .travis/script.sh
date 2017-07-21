@@ -105,9 +105,9 @@ main() {
 testHashLen() {
   local hash1 hash5 hash6 has_errors
 
-  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S)
-  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S)
-  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S)
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 --)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 --)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 --)
 
   [[ ${#hash1} -ne 34 ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ ${#hash5} -ne 55 ]] && showm "." $RED && has_errors=true || showm "." $GREEN
@@ -129,9 +129,9 @@ testHashLen() {
 testHashSalt() {
   local hash1 hash5 hash6 hash1S hash5S hash6S has_errors
 
-  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sa "$SALT")
-  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sa "$SALT")
-  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sa "$SALT")
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -sa "$SALT" --)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -sa "$SALT" --)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -sa "$SALT" --)
   
   hash1S=$(extractSalt "$hash1")
   hash5S=$(extractSalt "$hash5")
@@ -157,9 +157,9 @@ testHashSalt() {
 testHashSaltLength() {
   local hash1 hash5 hash6 hash1S hash5S hash6S has_errors
 
-  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sl $SALT_LENGTH)
-  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl $SALT_LENGTH)
-  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sl $SALT_LENGTH)
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -sl $SALT_LENGTH --)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -sl $SALT_LENGTH --)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -sl $SALT_LENGTH --)
 
   hash1S=$(extractSalt "$hash1")
   hash5S=$(extractSalt "$hash5")
@@ -185,9 +185,9 @@ testHashSaltLength() {
 testHashSaltMinMax() {
   local hashS hashB1 hashB5 hashSS hashB1S hashB5S has_errors
 
-  hashS=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl 2)
-  hashB1=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sl 60)
-  hashB5=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sl 60)
+  hashS=$(echo "$PASSWORD" | . "$MKCP" -5 -sl 2 --)
+  hashB1=$(echo "$PASSWORD" | . "$MKCP" -1 -sl 60 --)
+  hashB5=$(echo "$PASSWORD" | . "$MKCP" -5 -sl 60 --)
 
   hashSS=$(extractSalt "$hashS")
   hashB1S=$(extractSalt "$hashB1")
@@ -213,17 +213,17 @@ testHashSaltMinMax() {
 testHashResult() {
   local hash1 hash5 hash6 hash1S hash5S hash6S hash1R hash5R hash6R
 
-  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 -S)
-  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 -S)
-  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 -S)
+  hash1=$(echo "$PASSWORD" | . "$MKCP" -1 --)
+  hash5=$(echo "$PASSWORD" | . "$MKCP" -5 --)
+  hash6=$(echo "$PASSWORD" | . "$MKCP" -6 --)
 
   hash1S=$(extractSalt "$hash1")
   hash5S=$(extractSalt "$hash5")
   hash6S=$(extractSalt "$hash6")
 
-  hash1R=$(echo "$PASSWORD" | . "$MKCP" -1 -S -sa "$hash1S")
-  hash5R=$(echo "$PASSWORD" | . "$MKCP" -5 -S -sa "$hash5S")
-  hash6R=$(echo "$PASSWORD" | . "$MKCP" -6 -S -sa "$hash6S")
+  hash1R=$(echo "$PASSWORD" | . "$MKCP" -1 -sa "$hash1S" --)
+  hash5R=$(echo "$PASSWORD" | . "$MKCP" -5 -sa "$hash5S" --)
+  hash6R=$(echo "$PASSWORD" | . "$MKCP" -6 -sa "$hash6S" --)
 
   [[ "$hash1" != "$hash1R" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
   [[ "$hash5" != "$hash5R" ]] && showm "." $RED && has_errors=true || showm "." $GREEN
