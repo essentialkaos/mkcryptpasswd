@@ -2,7 +2,7 @@
 
 Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
-Version:         1.7.0
+Version:         1.7.1
 Release:         0%{?dist}
 License:         EKOL
 Group:           Applications/System
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Tue Dec 12 2017 Anton Novojilov <andy@essentialkaos.com> - 1.7.1-0
+- Code refactoring
+
 * Tue Jul 18 2017 Anton Novojilov <andy@essentialkaos.com> - 1.7.0-0
 - Fixed bug with options naming
 - Short option for stdin set to -- (was -s)
