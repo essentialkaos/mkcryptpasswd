@@ -18,12 +18,12 @@ Requires:        python
 
 Provides:        %{name} = %{version}-%{release}
 
-###############################################################################
+################################################################################
 
 %description
 Utility for generating encrypted passwords (can be used for /etc/shadow file)
 
-###############################################################################
+################################################################################
 
 %prep
 %setup -q
@@ -47,7 +47,7 @@ rm -rf %{buildroot}
 %{_bindir}/%{name}
 %{_mandir}/man8/*.8*
 
-###############################################################################
+################################################################################
 
 %changelog
 * Tue Dec 12 2017 Anton Novojilov <andy@essentialkaos.com> - 1.7.1-0
@@ -73,7 +73,7 @@ rm -rf %{buildroot}
 - Improved usage output
 
 * Sat Jan 02 2016 Anton Novojilov <andy@essentialkaos.com> - 1.5.0-0
-- Minor fixes and improvements 
+- Minor fixes and improvements
 
 * Mon Oct 19 2015 Anton Novojilov <andy@essentialkaos.com> - 1.4.1-0
 - Minor fixes and improvements
@@ -93,7 +93,7 @@ rm -rf %{buildroot}
 - Some minor improvements
 - Short args suport
 - Checking password strength
-- Changed license to EKOL 
+- Changed license to EKOL
 
 * Wed Oct 17 2012 Anton Novojilov <andy@essentialkaos.com> - 1.2.0-0
 - Some improvements
