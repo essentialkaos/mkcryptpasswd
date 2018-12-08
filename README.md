@@ -26,7 +26,7 @@ chmod +x mkcryptpasswd
 [sudo] mv mkcryptpasswd /usr/bin/
 ```
 
-Also, you can use the latest version of utilities without installation:
+Also, you can use the latest version of utility without installation:
 
 ```bash
 bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass options here
