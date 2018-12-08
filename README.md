@@ -1,4 +1,4 @@
-## `mkcryptpasswd` [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.org/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.st/ekol.svg)](https://essentialkaos.com/ekol)
+## `mkcryptpasswd` [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg)](https://travis-ci.org/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.st/ekol.svg)](https://essentialkaos.com/ekol)
 
 `mcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
 
@@ -6,24 +6,38 @@
 
 #### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
 
-```
+```bash
 [sudo] yum install -y https://yum.kaos.st/6/release/x86_64/kaos-repo-9.1-0.el6.noarch.rpm
 [sudo] yum install mcryptpasswd
 ```
 
 #### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
 
-```
+```bash
 [sudo] yum install -y https://yum.kaos.st/7/release/x86_64/kaos-repo-9.1-0.el7.noarch.rpm
 [sudo] yum install mcryptpasswd
+```
+
+#### From GitHub repository
+
+```bash
+wget https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd
+chmod +x mkcryptpasswd
+[sudo] mv mkcryptpasswd /usr/bin/
+```
+
+Also, you can use the latest version of utilities without installation:
+
+```bash
+bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass options here
 ```
 
 #### Using `install.sh`
 
 We provide simple bash script `script.sh` for installing app from the sources.
 
-```
-... install cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
+```bash
+# install cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
 
 git clone https://github.com/essentialkaos/mcryptpasswd.git
 cd mcryptpasswd
@@ -33,7 +47,7 @@ cd mcryptpasswd
 
 If you have some issues with installing, try to use script in debug mode:
 
-```
+```bash
 [sudo] ./install.sh --debug
 ```
 
