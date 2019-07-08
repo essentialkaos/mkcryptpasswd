@@ -1,6 +1,8 @@
 # Simple bibop recipe for mkcryptpasswd utility
 # More info: https://github.com/essentialkaos/bibop
 
+pkg mkcryptpasswd
+
 var password MyPassword1234
 
 command "mkcryptpasswd" "Generate basic hash for password"
