@@ -2,14 +2,14 @@
 
 Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
-Version:         1.7.1
+Version:         1.7.2
 Release:         0%{?dist}
 License:         EKOL
 Group:           Applications/System
 URL:             https://github.com/essentialkaos/mkcryptpasswd
 Vendor:          ESSENTIAL KAOS
 
-Source0:         https://source.kaos.io/%{name}/%{name}-%{version}.tar.bz2
+Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 
 BuildArch:       noarch
 BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -50,6 +50,10 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sat Nov 30 2019 Anton Novojilov <andy@essentialkaos.com> - 1.7.2-0
+- Added handling of SCRIPT_DEBUG environment variable for enabling debug mode
+- Added handler for script errors
+
 * Tue Dec 12 2017 Anton Novojilov <andy@essentialkaos.com> - 1.7.1-0
 - Code refactoring
 
