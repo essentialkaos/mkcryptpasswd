@@ -1,4 +1,4 @@
-## `mkcryptpasswd` [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg)](https://travis-ci.org/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.st/ekol.svg)](https://essentialkaos.com/ekol)
+## `mkcryptpasswd` [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg)](https://travis-ci.com/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.st/ekol.svg)](https://essentialkaos.com/ekol)
 
 `mcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
 
@@ -74,8 +74,8 @@ Options
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
-| `develop` | [![Build Status](https://travis-ci.org/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.org/essentialkaos/mkcryptpasswd) |
+| `master` | [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.com/essentialkaos/mkcryptpasswd) |
+| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.com/essentialkaos/mkcryptpasswd) |
 
 ### License
 
