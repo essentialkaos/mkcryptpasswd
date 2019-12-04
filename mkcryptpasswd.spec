@@ -2,7 +2,7 @@
 
 Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
-Version:         1.7.2
+Version:         1.7.3
 Release:         0%{?dist}
 License:         EKOL
 Group:           Applications/System
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Dec 04 2019 Anton Novojilov <andy@essentialkaos.com> - 1.7.3-0
+- Removed handler for script errors
+
 * Sat Nov 30 2019 Anton Novojilov <andy@essentialkaos.com> - 1.7.2-0
 - Added handling of SCRIPT_DEBUG environment variable for enabling debug mode
 - Added handler for script errors
