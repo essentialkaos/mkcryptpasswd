@@ -1,29 +1,31 @@
-## `mkcryptpasswd` [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg)](https://travis-ci.com/essentialkaos/mkcryptpasswd) [![License](https://gh.kaos.st/ekol.svg)](https://essentialkaos.com/ekol)
+<p align="center"><a href="#readme"><img src="https://gh.kaos.st/mkcryptpasswd.svg"/></a></p>
 
-`mcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
+<p align="center">
+  <a href="https://travis-ci.com/essentialkaos/mkcryptpasswd"><img src="https://travis-ci.com/essentialkaos/mkcryptpasswd.svg"></a>
+  <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
+</p>
+
+<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
+
+<br/>
+
+`mkcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
 
 ### Installation
 
-#### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
+#### From ESSENTIAL KAOS Public repository
 
 ```bash
-[sudo] yum install -y https://yum.kaos.st/kaos-repo-latest.el6.noarch.rpm
-[sudo] yum install mcryptpasswd
-```
-
-#### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
-
-```bash
-[sudo] yum install -y https://yum.kaos.st/kaos-repo-latest.el7.noarch.rpm
-[sudo] yum install mcryptpasswd
+sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
+sudo yum install mkcryptpasswd
 ```
 
 #### From GitHub repository
 
 ```bash
-wget https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd
+curl -fL# -o mkcryptpasswd https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd
 chmod +x mkcryptpasswd
-[sudo] mv mkcryptpasswd /usr/bin/
+sudo mv mkcryptpasswd /usr/bin/
 ```
 
 Also, you can use the latest version of utility without installation:
@@ -39,16 +41,16 @@ We provide simple bash script `script.sh` for installing app from the sources.
 ```bash
 # install cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
 
-git clone https://github.com/essentialkaos/mcryptpasswd.git
-cd mcryptpasswd
+git clone https://github.com/essentialkaos/mkcryptpasswd.git
+cd mkcryptpasswd
 
-[sudo] ./install.sh
+sudo ./install.sh
 ```
 
 If you have some issues with installing, try to use script in debug mode:
 
 ```bash
-[sudo] ./install.sh --debug
+sudo ./install.sh --debug
 ```
 
 ### Usage
