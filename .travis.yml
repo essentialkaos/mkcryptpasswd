@@ -1,4 +1,4 @@
-language: bash
+language: shell
 
 services:
   - docker
@@ -8,7 +8,7 @@ addons:
     packages:
     - libpam-cracklib
 
-matrix:
+jobs:
   fast_finish: true
 
 env:
