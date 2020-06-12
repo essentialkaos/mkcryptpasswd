@@ -1,7 +1,7 @@
-<p align="center"><a href="#readme"><img src="https://gh.kaos.st/mcryptpasswd.svg"/></a></p>
+<p align="center"><a href="#readme"><img src="https://gh.kaos.st/mkcryptpasswd.svg"/></a></p>
 
 <p align="center">
-  <a href="https://travis-ci.com/essentialkaos/mcryptpasswd"><img src="https://travis-ci.com/essentialkaos/mcryptpasswd.svg"></a>
+  <a href="https://travis-ci.com/essentialkaos/mkcryptpasswd"><img src="https://travis-ci.com/essentialkaos/mkcryptpasswd.svg"></a>
   <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
 </p>
 
@@ -9,7 +9,7 @@
 
 <br/>
 
-`mcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
+`mkcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
 
 ### Installation
 
@@ -17,7 +17,7 @@
 
 ```bash
 sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
-sudo yum install mcryptpasswd
+sudo yum install mkcryptpasswd
 ```
 
 #### From GitHub repository
@@ -41,8 +41,8 @@ We provide simple bash script `script.sh` for installing app from the sources.
 ```bash
 # install cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
 
-git clone https://github.com/essentialkaos/mcryptpasswd.git
-cd mcryptpasswd
+git clone https://github.com/essentialkaos/mkcryptpasswd.git
+cd mkcryptpasswd
 
 sudo ./install.sh
 ```
