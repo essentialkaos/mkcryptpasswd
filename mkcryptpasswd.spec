@@ -4,7 +4,7 @@ Summary:         Utility for encrypting passwords
 Name:            mkcryptpasswd
 Version:         1.7.3
 Release:         0%{?dist}
-License:         EKOL
+License:         Apache License, Version 2.0
 Group:           Applications/System
 URL:             https://github.com/essentialkaos/mkcryptpasswd
 Vendor:          ESSENTIAL KAOS
@@ -43,7 +43,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE.EN LICENSE.RU
+%doc LICENSE
 %{_bindir}/%{name}
 %{_mandir}/man8/*.8*
 
@@ -100,7 +100,7 @@ rm -rf %{buildroot}
 - Some minor improvements
 - Short args suport
 - Checking password strength
-- Changed license to EKOL
+- Changed license to Apache License, Version 2.0
 
 * Wed Oct 17 2012 Anton Novojilov <andy@essentialkaos.com> - 1.2.0-0
 - Some improvements
