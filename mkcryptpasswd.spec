@@ -1,8 +1,8 @@
 ################################################################################
 
-Summary:         Utility for encrypting passwords
+Summary:         Utility for hashing password
 Name:            mkcryptpasswd
-Version:         1.7.3
+Version:         1.8.0
 Release:         0%{?dist}
 License:         Apache License, Version 2.0
 Group:           Applications/System
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sat Sep 26 2020 Anton Novojilov <andy@essentialkaos.com> - 1.8.0-0
+- Added option --secure/-s for disabling echoing password
+
 * Wed Dec 04 2019 Anton Novojilov <andy@essentialkaos.com> - 1.7.3-0
 - Removed handler for script errors
 

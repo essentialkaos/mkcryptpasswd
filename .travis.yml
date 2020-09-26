@@ -28,5 +28,5 @@ before_install:
 script:
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/mkcryptpasswd'
-  - ./bibop -ip -p SOURCES .bibop/mkcryptpasswd.recipe
+  - ./bibop -ip -p ../SOURCES .bibop/mkcryptpasswd.recipe
   - ./perfecto-docker mkcryptpasswd.spec
