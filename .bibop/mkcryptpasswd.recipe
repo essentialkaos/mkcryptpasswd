@@ -1,0 +1,48 @@
+# Bibop recipe for MkCryptPasswd
+# See more: https://kaos.sh/bibop
+
+pkg mkcryptpasswd
+
+fast-finish yes
+
+var password MyPassword1234
+var salt SALT1234
+var salt_length 9
+
+command "mkcryptpasswd -s" "Generate basic hash for password"
+  expect "Please enter password:"
+  print "{password}"
+  expect "Hash: "
+  exit 0
+
+command "mkcryptpasswd -s -sa {salt}" "Generate hash for password with predefined salt"
+  expect "Please enter password"
+  print "{password}"
+  expect "$6${salt}$lTxNu4.6r/j81sirgJ.s9ai8AA3tJdp67XBWLFiE10tIharVYtzRJ9eJ9YEtQsiLzVtg94GrXAYjf40pWEEg7/"
+  exit 0
+
+command "mkcryptpasswd -s -sa {salt} -1" "Generate MD5 hash for password with predefined salt"
+  expect "Please enter password"
+  print "{password}"
+  expect "$1${salt}$zIPLJYODoLlesdP3bf95S1"
+  exit 0
+
+command "mkcryptpasswd -s -sa {salt} -5" "Generate SHA256 hash for password with predefined salt"
+  expect "Please enter password"
+  print "{password}"
+  expect "$5${salt}$HOV.9Dkp4HSDzcfizNDG7x5ST4e74zcezvCJ8BWHuK8"
+  exit 0
+
+command "mkcryptpasswd -s -S" "Return error if password is too weak"
+  expect "Please enter password"
+  print "password"
+  expect "Password is too weak: it is based on a dictionary word"
+  print "password"
+  expect "Password is too weak: it is based on a dictionary word"
+  print "password"
+  expect "Password is too weak: it is based on a dictionary word"
+  !exit 0
+
+command "mkcryptpasswd --abcd" "Return error about unsupported argument"
+  expect "Error! You used unsupported argument --abcd. Please check command syntax."
+  !exit 0
