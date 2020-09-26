@@ -1,6 +1,6 @@
 .\" Manpage for mkcryptpasswd
 
-.TH MKCRYPTPASSWD 8 "04 Dec 2019" "mkcryptpasswd 1.7.3" "mkcryptpasswd Manual"
+.TH MKCRYPTPASSWD 8 "24 Sep 2020" "mkcryptpasswd 1.8.0" "mkcryptpasswd Manual"
 
 .SH NAME 
 
@@ -39,6 +39,10 @@ Generate password encrypted by SHA algorithm with 512 bits digests (default)
 .TP
 .B --strong, -s
 Return error if password is too weak
+
+.TP
+.B --secure, -s
+Do not echo password
 
 .TP
 .B --stdin, --

@@ -10,7 +10,7 @@ fi
 ########################################################################################
 
 APP="MkCryptPasswd"
-VER="1.7.3"
+VER="1.8.0"
 
 ###############################################################################
 
@@ -52,11 +52,11 @@ SALT_TEMP="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 MIN_SALT_LENGTH=4
 MAX_SALT_LENGTH=32
 
-SUPPORTED_ARGS="!version !ver !help !usage !stdin !strong 
+SUPPORTED_ARGS="!version !ver !help !usage !stdin !strong !secure 
  !MD5 !SHA256 !SHA512 salt salt_length !no_colors"
 
 SHORT_ARGS="v:!version h:!help sa:salt sl:salt_length 
- S:!strong 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
+ s:!secure S:!strong 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
 
 method=6
 salt_length=8
@@ -115,7 +115,7 @@ calculate() {
       exit 1
     fi
 
-    if ! isWellPassword "$password" ; then
+    if ! isGoodPassword "$password" ; then
       exit 1
     fi
   else
@@ -126,15 +126,20 @@ calculate() {
 
       show "Please enter password:" $CYAN
 
-      now=$(date +%s)
+      if [[ -n "$secure" ]] ; then
+        read -s -r -p "> " password
+        show ""
+      else
+        now=$(date +%s)
 
-      read -r -p "> " password
+        read -r -p "> " password
 
-      # If stdin present, we read it immediately
-      # In this case we need additional line
-      [[ "$now" == $(date +%s) ]] && show ""
+        # If stdin present, we read it immediately
+        # In this case we need additional line
+        [[ "$now" == $(date +%s) ]] && show ""
 
-      clnPassInput ${#password}
+        clnPassInput ${#password}
+      fi
 
       if [[ -z "$password" ]] ; then
         show ""
@@ -144,7 +149,7 @@ calculate() {
         continue
       fi
 
-      if isWellPassword "$password" ; then
+      if isGoodPassword "$password" ; then
         break
       else
         (( error_num++ ))
@@ -167,7 +172,7 @@ calculate() {
   fi
 }
 
-isWellPassword() {
+isGoodPassword() {
   [[ -z "$strong" ]] && return 0
 
   local password_info
@@ -238,6 +243,7 @@ usage() {
     show "  ${CL_GREEN}--SHA512, -6${CL_NORM} ${CL_DARK}........${CL_NORM} Generate password hash by SHA algorithm with 512 bits digests ${CL_DARK}(default)${CL_NORM}"
     show "  ${CL_GREEN}--stdin, --${CL_NORM} ${CL_DARK}.........${CL_NORM} Read password from stdin"
     show "  ${CL_GREEN}--strong, -S${CL_NORM} ${CL_DARK}........${CL_NORM} Return error if password is too weak"
+    show "  ${CL_GREEN}--secure, -s${CL_NORM} ${CL_DARK}........${CL_NORM} Do not echo password"
     show "  ${CL_GREEN}--salt, -sa${CL_NORM} ${CL_DARK}.........${CL_NORM} Salt"
     show "  ${CL_GREEN}--salt-length, -sl${CL_NORM} ${CL_DARK}..${CL_NORM} Generated salt length ${CL_DARK}(4-16, 8 by default)${CL_NORM}"
     show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}.......${CL_NORM} Show information about version"
@@ -248,6 +254,7 @@ usage() {
     show "  ${CL_GREEN}--SHA512, -6${CL_NORM}          Generate password hash by SHA algorithm with 512 bits digests (default)"
     show "  ${CL_GREEN}--stdin, --${CL_NORM}           Read password from stdin"
     show "  ${CL_GREEN}--strong, -S${CL_NORM}          Return error if password is too weak"
+    show "  ${CL_GREEN}--secure, -s${CL_NORM}          Do not echo password"
     show "  ${CL_GREEN}--salt, -sa${CL_NORM}           Salt"
     show "  ${CL_GREEN}--salt-length, -sl${CL_NORM}    Generated salt length (4-16, 8 by default)"
     show "  ${CL_GREEN}--version, -v${CL_NORM}         Show information about version"
