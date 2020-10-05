@@ -9,11 +9,11 @@
 
 <br/>
 
-`mkcryptpasswd` is utility for hashing passwords to passwd compatible format (can be used for `/etc/shadow` file).
+`mkcryptpasswd` is utility for hashing passwords.
 
 ### Installation
 
-#### From ESSENTIAL KAOS Public repository
+#### From [ESSENTIAL KAOS Public Repository](https://yum.kaos.st)
 
 ```bash
 sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
@@ -39,7 +39,7 @@ bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass op
 We provide simple bash script `script.sh` for installing app from the sources.
 
 ```bash
-# install cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
+# install python and cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
 
 git clone https://github.com/essentialkaos/mkcryptpasswd.git
 cd mkcryptpasswd
@@ -65,6 +65,7 @@ Options
   --SHA512, -6          Generate password hash by SHA algorithm with 512 bits digests (default)
   --stdin, --           Read password from stdin
   --strong, -S          Return error if password is too weak
+  --secure, -s          Do not echo password
   --salt, -sa           Salt
   --salt-length, -sl    Generated salt length (4-16, 8 by default)
   --version, -v         Show information about version
