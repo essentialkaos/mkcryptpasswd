@@ -1,7 +1,7 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/mkcryptpasswd.svg"/></a></p>
 
 <p align="center">
-  <a href="https://travis-ci.com/essentialkaos/mkcryptpasswd"><img src="https://travis-ci.com/essentialkaos/mkcryptpasswd.svg"></a>
+  <a href="https://github.com/essentialkaos/mkcryptpasswd/actions"><img src="https://github.com/essentialkaos/mkcryptpasswd/workflows/CI/badge.svg" alt="GitHub Actions Status" /></a>
   <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
 </p>
 
@@ -77,8 +77,8 @@ Options
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg?branch=master)](https://travis-ci.com/essentialkaos/mkcryptpasswd) |
-| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/mkcryptpasswd.svg?branch=develop)](https://travis-ci.com/essentialkaos/mkcryptpasswd) |
+| `master` | [![CI](https://github.com/essentialkaos/mkcryptpasswd/workflows/CI/badge.svg?branch=master)](https://github.com/essentialkaos/mkcryptpasswd/actions) |
+| `develop` | [![CI](https://github.com/essentialkaos/mkcryptpasswd/workflows/CI/badge.svg?branch=develop)](https://github.com/essentialkaos/mkcryptpasswd/actions) |
 
 ### License
 
