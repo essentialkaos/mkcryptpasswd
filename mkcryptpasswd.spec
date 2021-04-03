@@ -2,7 +2,7 @@
 
 Summary:         Utility for hashing password
 Name:            mkcryptpasswd
-Version:         1.8.0
+Version:         1.9.0
 Release:         0%{?dist}
 License:         Apache License, Version 2.0
 Group:           Applications/System
@@ -50,6 +50,12 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sat Apr 03 2021 Anton Novojilov <andy@essentialkaos.com> - 1.9.0-0
+- Added Python 3 support
+- Updated options parser to the latest version
+- Code refactoring
+- Minor improvements
+
 * Sat Sep 26 2020 Anton Novojilov <andy@essentialkaos.com> - 1.8.0-0
 - Added option --secure/-s for disabling echoing password
 

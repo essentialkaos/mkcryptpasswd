@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1117,SC2034,SC2154
 
-########################################################################################
+################################################################################
 
 if [[ -n "${SCRIPT_DEBUG}" ]] ; then
   set -x
 fi
 
-########################################################################################
+################################################################################
 
 APP="MkCryptPasswd"
-VER="1.8.0"
+VER="1.9.0"
+DESC="Utility for hashing passwords"
 
-###############################################################################
+################################################################################
 
 NORM=0
 BOLD=1
@@ -45,26 +46,26 @@ CL_BL_MAG="\e[1;${MAG};49m"
 CL_BL_CYAN="\e[1;${CYAN};49m"
 CL_BL_GREY="\e[1;${GREY};49m"
 
-###############################################################################
+################################################################################
 
 SALT_TEMP="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 MIN_SALT_LENGTH=4
 MAX_SALT_LENGTH=32
 
-SUPPORTED_ARGS="!version !ver !help !usage !stdin !strong !secure 
+SUPPORTED_OPTS="!version !ver !help !usage !stdin !strong !secure 
  !MD5 !SHA256 !SHA512 salt salt_length !no_colors"
 
-SHORT_ARGS="v:!version h:!help sa:salt sl:salt_length 
+SHORT_OPTS="v:!version h:!help sa:salt sl:salt_length 
  s:!secure S:!strong 1:!MD5 5:!SHA256 6:!SHA512 nc:!no_colors"
 
 method=6
 salt_length=8
 
-###############################################################################
+################################################################################
 
 main() {
-  if [[ ! -t 1 || -n "$no_colors" ]] ; then
+  if [[ -n "$no_colors" ]] ; then
     unset NORM BOLD UNLN RED GREEN YELLOW BLUE MAG CYAN GREY DARK
     unset CL_NORM CL_BOLD CL_UNLN CL_RED CL_GREEN CL_YELLOW CL_BLUE CL_MAG CL_CYAN CL_GREY CL_DARK
     unset CL_BL_RED CL_BL_GREEN CL_BL_YELLOW CL_BL_BLUE CL_BL_MAG CL_BL_CYAN CL_BL_GREY CL_BL_DARK
@@ -80,8 +81,20 @@ main() {
     exit 0
   fi
 
-  if ! checkDeps "python" "mktemp" "cracklib-check" ; then
-    error "Error! For using this utility you must install python, cracklib-check and mktemp." $RED
+  prepare "$@"
+  calculate "$@"
+}
+
+prepare() {
+  if ! checkDeps "python" ; then
+    if ! checkDeps "python3" ; then
+      error "Error! For using this utility, you must install python first."
+      exit 1
+    fi
+  fi
+
+  if ! checkDeps "mktemp" "cracklib-check" ; then
+    error "Error! For using this utility, you must install cracklib-check and mktemp first."
     exit 1
   fi
 
@@ -96,8 +109,6 @@ main() {
   if [[ "$*" == "--" ]] ; then
     stdin=true
   fi
-
-  calculate "$@"
 }
 
 calculate() {
@@ -111,7 +122,7 @@ calculate() {
     password=$(cat /dev/stdin)
 
     if [[ -z "$password" ]] ; then
-      error "Password can't be empty!" $RED
+      error "Password can not be empty!"
       exit 1
     fi
 
@@ -124,7 +135,7 @@ calculate() {
         exit 1
       fi
 
-      show "Please enter password:" $CYAN
+      show "Please enter the password:" $CYAN
 
       if [[ -n "$secure" ]] ; then
         read -s -r -p "> " password
@@ -143,7 +154,7 @@ calculate() {
 
       if [[ -z "$password" ]] ; then
         show ""
-        error "Password can't be empty!" $YELLOW
+        show "Password can't be empty!" $YELLOW
         show ""
         (( error_num++ ))
         continue
@@ -163,7 +174,11 @@ calculate() {
     method=5
   fi
 
-  pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
+  if checkDeps "python3" ; then
+    pass_hash=$(python3 -c "import crypt; print(crypt.crypt('${password}', '\$${method}\$${salt}\$'))")
+  else
+    pass_hash=$(python -c "import crypt; print crypt.crypt('${password}', '\$${method}\$${salt}\$')")
+  fi
 
   if [[ -n "$stdin" ]] ; then
     show "$pass_hash"
@@ -215,7 +230,7 @@ clnPassInput() {
   printf "\e[1A%s\n" "$result"
 }
 
-###############################################################################
+################################################################################
 
 show() {
   [[ -n "$silent" ]] && return
@@ -228,7 +243,7 @@ show() {
 }
 
 error() {
-  show "$@" 1>&2
+  show "$@" $RED 1>&2
 }
 
 usage() {
@@ -265,123 +280,126 @@ usage() {
 
 about() {
   show ""
-  show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for hashing password"
+  show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - $DESC"
   show ""
   show "Copyright (C) 2009-$(date +%Y) ESSENTIAL KAOS" $DARK
   show "Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>" $DARK
   show ""
 }
 
-showArgWarn() {
-  error "Error! You used unsupported argument $1. Please check command syntax." $RED
+showOptWarn() {
+  error "Error! You have used unsupported argument $1. Please check command syntax."
   exit 1
 }
 
-## ARGUMENTS PARSING 4 #################################################################
+## OPTIONS PARSING 5 ###########################################################
 
-[[ $# -eq 0 ]] && main && exit $?
+if [[ $# -eq 0 ]] ; then
+  main
+  exit $?
+fi
 
-unset arg argn argm argv argt argk
+unset opt optn optm optv optt optk
 
-argv="$*" ; argt=""
+optv="$*" ; optt=""
 
 while [[ -n "$1" ]] ; do
-  if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare "$argn=$1"
+  if [[ "$1" =~ \  && -n "$optn" ]] ; then
+    declare "$optn=$1"
 
-    unset argn && shift && continue
+    unset optn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
-    argm=${1:1}
+    optm=${1:1}
 
-    if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
-      arg="${BASH_REMATCH[1]}"
+    if [[ \ $SHORT_OPTS\  =~ \ $optm:!?([a-zA-Z0-9_]*) ]] ; then
+      opt="${BASH_REMATCH[1]}"
     else
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
-    if [[ -z "$argn" ]] ; then
-      argn=$arg
+    if [[ -z "$optn" ]] ; then
+      optn=$opt
     else
       # shellcheck disable=SC2015
-      [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
-      argn=$arg
+      [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
+      optn=$opt
     fi
 
-    if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+    if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare "$argn=true" ; unset argn ; argk=true
+      declare "$optn=true" ; unset optn ; optk=true
     else
-      unset argk
+      unset optk
     fi
 
     shift && continue
   elif [[ "$1" =~ ^-{2}[a-zA-Z]{1}[a-zA-Z0-9_-]+.*$ ]] ; then
-    arg=${1:2}
+    opt=${1:2}
 
-    if [[ $arg == *=* ]] ; then
-      IFS="=" read -ra arg <<< "$arg"
+    if [[ $opt == *=* ]] ; then
+      IFS="=" read -ra opt <<< "$opt"
 
-      argm="${arg[0]}" ; argm=${argm//-/_}
+      optm="${opt[0]}" ; optm=${optm//-/_}
 
-      if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${arg[0]//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ $optm\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${opt[0]//_/-}"
         shift && continue
       fi
 
       # shellcheck disable=SC2015
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[*]:1:99}" || declare "$argm=${arg[*]:1:99}"
+      [[ -n "${!optm}" && $MERGEABLE_OPTS\  =~ $optm\  ]] && declare "$optm=${!optm} ${opt[*]:1:99}" || declare "$optm=${opt[*]:1:99}"
 
-      unset argm && shift && continue
+      unset optm && shift && continue
     else
       # shellcheck disable=SC2178
-      arg=${arg//-/_}
+      opt=${opt//-/_}
 
-      if [[ -z "$argn" ]] ; then
+      if [[ -z "$optn" ]] ; then
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       else
         # shellcheck disable=SC2015
-        [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
+        [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       fi
 
-      if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${argn//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${optn//_/-}"
         shift && continue
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare "$argn=true" ; unset argn ; argk=true
+        declare "$optn=true" ; unset optn ; optk=true
       else
-        unset argk
+        unset optk
       fi
 
       shift && continue
     fi
   else
-    if [[ -n "$argn" ]] ; then
+    if [[ -n "$optn" ]] ; then
       # shellcheck disable=SC2015
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
+      [[ -n "${!optn}" && $MERGEABLE_OPTS\  =~ $optn\  ]] && declare "$optn=${!optn} $1" || declare "$optn=$1"
 
-      unset argn && shift && continue
+      unset optn && shift && continue
     fi
   fi
 
-  argt="$argt $1" ; shift
+  optt="$optt $1" ; shift
 
 done
 
-[[ -n "$argn" ]] && declare "$argn=true"
+[[ -n "$optn" ]] && declare "$optn=true"
 
-unset arg argn argm argk
+unset opt optn optm optk
 
 # shellcheck disable=SC2015,SC2086
-[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1}
+[[ -n "$KEEP_OPTS" ]] && main $optv || main ${optt:1}
 
-########################################################################################
+################################################################################

@@ -12,7 +12,7 @@
 # /$$$$$$| $$ \  $$|  $$$$$$/   | $$  | $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$
 #|______/|__/  \__/ \______/    |__/  |__/  |__/|________/|________/|________/|__/  |__/
 #
-#                            EK UTILITY INSTALLER v1.2.1
+#                            EK UTILITY INSTALLER v1.3.0
 #
 ########################################################################################
 
@@ -39,32 +39,8 @@ CL_MAG="\e[${MAG}m"
 CL_CYAN="\e[${CYAN}m"
 CL_GREY="\e[${GREY}m"
 CL_DARK="\e[${DARK}m"
-CL_BL_RED="\e[${RED};1m"
-CL_BL_GREEN="\e[${GREEN};1m"
-CL_BL_BROWN="\e[${BROWN};1m"
-CL_BL_BLUE="\e[${BLUE};1m"
-CL_BL_MAG="\e[${MAG};1m"
-CL_BL_CYAN="\e[${CYAN};1m"
-CL_BL_GREY="\e[${GREY};1m"
-CL_BL_DARK="\e[${DARK};1m"
-CL_UL_RED="\e[${RED};4m"
-CL_UL_GREEN="\e[${GREEN};4m"
-CL_UL_BROWN="\e[${BROWN};4m"
-CL_UL_BLUE="\e[${BLUE};4m"
-CL_UL_MAG="\e[${MAG};4m"
-CL_UL_CYAN="\e[${CYAN};4m"
-CL_UL_GREY="\e[${GREY};4m"
-CL_UL_DARK="\e[${DARK};4m"
-CL_BG_RED="\e[${RED};7m"
-CL_BG_GREEN="\e[${GREEN};7m"
-CL_BG_BROWN="\e[${BROWN};7m"
-CL_BG_BLUE="\e[${BLUE};7m"
-CL_BG_MAG="\e[${MAG};7m"
-CL_BG_CYAN="\e[${CYAN};7m"
-CL_BG_GREY="\e[${GREY};7m"
-CL_BG_DARK="\e[${DARK};7m"
 
-########################################################################################
+################################################################################
 
 OS_LINUX="linux"
 OS_SOLARIS="solaris"
@@ -79,15 +55,15 @@ DIST_GENTOO="gentoo"
 DIST_RHEL="rhel"
 DIST_UBUNTU="ubuntu"
 
-########################################################################################
+################################################################################
 
-# List of supported command line arguments (String)
-SUPPORTED_ARGS="no-deps debug yes"
+# List of supported command line options (String)
+SUPPORTED_OPTS="no-deps debug yes"
 
-# List of supported short command line arguments (String)
-SHORT_ARGS="n:!no-deps D:!debug y:!yes"
+# List of supported short command line options (String)
+SHORT_OPTS="n:!no-deps D:!debug y:!yes"
 
-########################################################################################
+################################################################################
 
 # OS name (String)
 os_name=""
@@ -104,7 +80,7 @@ requireFailed=""
 # Script directory (String)
 script_dir=$(dirname "$0")
 
-########################################################################################
+################################################################################
 
 # Main func
 #
@@ -131,8 +107,8 @@ doInstall() {
   confirmInstall "mcryptpasswd"
 
   case $os_dist in
-    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "cracklib" ;;
-    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "libpam-cracklib" ;;
+    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "python3" "cracklib"        ;;
+    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "python3" "libpam-cracklib" ;;
     *) error "Unsupported platform" ; requireFailed=true 
   esac
 
@@ -140,26 +116,26 @@ doInstall() {
     show "" && exit 1
   fi
 
-  action "Copied script to /usr/bib directory" \
+  action "Copy script to /usr/bib directory" \
          "cp" "SOURCES/mkcryptpasswd" "/usr/bin/mkcryptpasswd"
 
-  action "Added +x flag for script" \
+  action "Add +x flag for script" \
          "chmod" "+x" "/usr/bin/mkcryptpasswd"
 
   cp SOURCES/mkcryptpasswd.8 .
 
-  action "Created man page" \
+  action "Pack man page" \
          "gzip" "mkcryptpasswd.8"
 
-  action "Man page moved to man dir" \
+  action "Move man page to directory with all man pages" \
          "mv" "mkcryptpasswd.8.gz" "/usr/share/man/man8/"
 
   congratulate "mcryptpasswd"
 }
 
-########################################################################################
+################################################################################
 
-# Do some install action
+# Executes installation action
 #
 # 1: Description (String)
 # *: Command
@@ -180,11 +156,11 @@ action() {
   fi
 
   if [[ $? -ne 0 ]] ; then
-    show "${CL_RED}+${CL_NORM} $desc"
-    error "\nError occurred with last action. Install process will be interrupted.\n"
+    show "${CL_RED}✖ ${CL_NORM} $desc"
+    error "\nError occurred with last action. Installation process was interrupted.\n"
     exit 1
   else
-    show "${CL_GREEN}+${CL_NORM} $desc"
+    show "${CL_GREEN}✔ ${CL_NORM} $desc"
   fi
 }
 
@@ -206,9 +182,9 @@ require() {
   esac
 }
 
-# Check required rpm package
+# Checks for required rpm packages
 #
-# 1: Package name (String)
+# *: Packages
 #
 # Code: No
 # Echo: No
@@ -217,19 +193,21 @@ requireRPM() {
     return
   fi
 
-  local package="$1"
+  local pkg
 
-  rpm -q "$package" &> /dev/null
+  for pkg in "$@" ; do
+    rpm -q "$pkg" &> /dev/null
 
-  if [[ $? -ne 0 ]] ; then
-    warn "This app require package $package, please install it first"
-    requireFailed=true
-  fi
+    if [[ $? -ne 0 ]] ; then
+      error "This app requires package $pkg."
+      requireFailed=true
+    fi
+  done
 }
 
-# Check required deb package
+# Checks for required deb packages
 #
-# 1: Package name (String)
+# *: Packages
 #
 # Code: No
 # Echo: No
@@ -238,28 +216,30 @@ requireDEB() {
     return
   fi
 
-  local package="$1"
+  local pkg
 
-  dpkg -s "$package" &> /dev/null
+  for pkg in "$@" ; do
+    dpkg -s "$pkg" &> /dev/null
 
-  if [[ $? -ne 0 ]] ; then
-    warn "This app require package $package, please install it first"
-    requireFailed=true
-  fi
+    if [[ $? -ne 0 ]] ; then
+      error "This app requires package $pkg."
+      requireFailed=true
+    fi
+  done
 }
 
-# Require root privileges
+# Checks root privileges
 #
 # Code: No
 # Echo: No
 requireRoot() {
   if [[ $(id -u) != "0" ]] ; then
-    error "Superuser privileges is required for install"
+    error "Superuser privileges is required"
     exit 1
   fi
 }
 
-# Confirm install
+# Confirms install
 #
 # 1: App name (String)
 #
@@ -267,19 +247,18 @@ requireRoot() {
 # Echo: No
 confirmInstall() {
   if [[ -n "$yes" ]] ; then
-    show "\nArgument --yes/-y passed to script, install forced\n" $DARK
     return 0
   fi
 
   show ""
-  show "You really want install latest version of $1? (y/N):" $CYAN
+  show "You really want to install the latest version of $1? (y/N):" $CYAN
 
   if ! readAnswer "N" ; then
     return 1
   fi
 }
 
-# Congratulate with success install
+# Congratulates with success install
 #
 # 1: App name (String)
 #
@@ -289,7 +268,7 @@ congratulate() {
   show "\nYay! $1 is successfully installed!\n" $GREEN
 }
 
-# Read user yes/no answer
+# Reads user yes/no answer
 #
 # 1: Default value (String)
 #
@@ -314,7 +293,7 @@ readAnswer() {
   fi
 }
 
-# Collect system info
+# Collects system info
 #
 # Code: No
 # Echo: No
@@ -344,27 +323,27 @@ detectOs() {
   fi
 }
 
-# Show error message
+# Shows error message
 #
 # 1: Message (String)
 #
 # Code: No
 # Echo: No
 error() {
-  show "$*" $RED
+  show "$*" $RED 1>&2
 }
 
-# Show warning message
+# Shows warning message
 #
 # 1: Message (String)
 #
 # Code: No
 # Echo: No
 warn() {
-  show "$*" $BROWN
+  show "$*" $BROWN 1>&2
 }
 
-# Show message
+# Shows message
 #
 # 1: Message (String)
 # 2: Color code (Number) [Optional]
@@ -379,122 +358,125 @@ show() {
   fi
 }
 
-# Show error message about unsupported argument
+# Prints message about unsupported option
 #
-# 1: Argument (String)
+# 1: Option name (String)
 #
 # Code: No
 # Echo: No
-showArgWarn() {
-  show "Unknown argument $1." $RED
+showOptWarn() {
+  error "Unknown option $1"
   exit 1
 }
 
-## ARGUMENTS PARSING 4 #################################################################
+## OPTIONS PARSING 5 ###########################################################
 
-[[ $# -eq 0 ]] && main && exit $?
+if [[ $# -eq 0 ]] ; then
+  main
+  exit $?
+fi
 
-unset arg argn argm argv argt argk
+unset opt optn optm optv optt optk
 
-argv="$*" ; argt=""
+optv="$*" ; optt=""
 
 while [[ -n "$1" ]] ; do
-  if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare "$argn=$1"
+  if [[ "$1" =~ \  && -n "$optn" ]] ; then
+    declare "$optn=$1"
 
-    unset argn && shift && continue
+    unset optn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
-    argm=${1:1}
+    optm=${1:1}
 
-    if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
-      arg="${BASH_REMATCH[1]}"
+    if [[ \ $SHORT_OPTS\  =~ \ $optm:!?([a-zA-Z0-9_]*) ]] ; then
+      opt="${BASH_REMATCH[1]}"
     else
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
-    if [[ -z "$argn" ]] ; then
-      argn=$arg
+    if [[ -z "$optn" ]] ; then
+      optn=$opt
     else
       # shellcheck disable=SC2015
-      [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
-      argn=$arg
+      [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
+      optn=$opt
     fi
 
-    if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+    if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare "$argn=true" ; unset argn ; argk=true
+      declare "$optn=true" ; unset optn ; optk=true
     else
-      unset argk
+      unset optk
     fi
 
     shift && continue
   elif [[ "$1" =~ ^-{2}[a-zA-Z]{1}[a-zA-Z0-9_-]+.*$ ]] ; then
-    arg=${1:2}
+    opt=${1:2}
 
-    if [[ $arg == *=* ]] ; then
-      IFS="=" read -ra arg <<< "$arg"
+    if [[ $opt == *=* ]] ; then
+      IFS="=" read -ra opt <<< "$opt"
 
-      argm="${arg[0]}" ; argm=${argm//-/_}
+      optm="${opt[0]}" ; optm=${optm//-/_}
 
-      if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${arg[0]//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ $optm\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${opt[0]//_/-}"
         shift && continue
       fi
 
       # shellcheck disable=SC2015
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[*]:1:99}" || declare "$argm=${arg[*]:1:99}"
+      [[ -n "${!optm}" && $MERGEABLE_OPTS\  =~ $optm\  ]] && declare "$optm=${!optm} ${opt[*]:1:99}" || declare "$optm=${opt[*]:1:99}"
 
-      unset argm && shift && continue
+      unset optm && shift && continue
     else
       # shellcheck disable=SC2178
-      arg=${arg//-/_}
+      opt=${opt//-/_}
 
-      if [[ -z "$argn" ]] ; then
+      if [[ -z "$optn" ]] ; then
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       else
         # shellcheck disable=SC2015
-        [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
+        [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       fi
 
-      if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${argn//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${optn//_/-}"
         shift && continue
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare "$argn=true" ; unset argn ; argk=true
+        declare "$optn=true" ; unset optn ; optk=true
       else
-        unset argk
+        unset optk
       fi
 
       shift && continue
     fi
   else
-    if [[ -n "$argn" ]] ; then
+    if [[ -n "$optn" ]] ; then
       # shellcheck disable=SC2015
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
+      [[ -n "${!optn}" && $MERGEABLE_OPTS\  =~ $optn\  ]] && declare "$optn=${!optn} $1" || declare "$optn=$1"
 
-      unset argn && shift && continue
+      unset optn && shift && continue
     fi
   fi
 
-  argt="$argt $1" ; shift
+  optt="$optt $1" ; shift
 
 done
 
-[[ -n "$argn" ]] && declare "$argn=true"
+[[ -n "$optn" ]] && declare "$optn=true"
 
-unset arg argn argm argk
+unset opt optn optm optk
 
 # shellcheck disable=SC2015,SC2086
-[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1}
+[[ -n "$KEEP_OPTS" ]] && main $optv || main ${optt:1}
 
-########################################################################################
+################################################################################

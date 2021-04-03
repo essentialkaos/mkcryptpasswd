@@ -41,7 +41,7 @@ We provide simple bash script `script.sh` for installing app from the sources.
 ```bash
 # install python and cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
 
-git clone https://github.com/essentialkaos/mkcryptpasswd.git
+git clone https://kaos.sh/mkcryptpasswd.git
 cd mkcryptpasswd
 
 sudo ./install.sh
