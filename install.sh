@@ -116,18 +116,18 @@ doInstall() {
     show "" && exit 1
   fi
 
-  action "Copied script to /usr/bib directory" \
+  action "Copy script to /usr/bib directory" \
          "cp" "SOURCES/mkcryptpasswd" "/usr/bin/mkcryptpasswd"
 
-  action "Added +x flag for script" \
+  action "Add +x flag for script" \
          "chmod" "+x" "/usr/bin/mkcryptpasswd"
 
   cp SOURCES/mkcryptpasswd.8 .
 
-  action "Created man page" \
+  action "Pack man page" \
          "gzip" "mkcryptpasswd.8"
 
-  action "Man page moved to man dir" \
+  action "Move man page to directory with all man pages" \
          "mv" "mkcryptpasswd.8.gz" "/usr/share/man/man8/"
 
   congratulate "mcryptpasswd"
