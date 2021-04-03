@@ -81,8 +81,7 @@ main() {
     exit 0
   fi
 
-  prepare
-
+  prepare "$@"
   calculate "$@"
 }
 
