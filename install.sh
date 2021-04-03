@@ -156,11 +156,11 @@ action() {
   fi
 
   if [[ $? -ne 0 ]] ; then
-    show "${CL_RED}+${CL_NORM} $desc"
-    error "\nError occurred with last action. Install process will be interrupted.\n"
+    show "${CL_RED}✖ ${CL_NORM} $desc"
+    error "\nError occurred with last action. Installation process was interrupted.\n"
     exit 1
   else
-    show "${CL_GREEN}+${CL_NORM} $desc"
+    show "${CL_GREEN}✔ ${CL_NORM} $desc"
   fi
 }
 
