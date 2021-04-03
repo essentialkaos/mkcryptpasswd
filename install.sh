@@ -107,8 +107,8 @@ doInstall() {
   confirmInstall "mcryptpasswd"
 
   case $os_dist in
-    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "python" "cracklib"        ;;
-    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "python" "libpam-cracklib" ;;
+    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "python3" "cracklib"        ;;
+    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "python3" "libpam-cracklib" ;;
     *) error "Unsupported platform" ; requireFailed=true 
   esac
 
