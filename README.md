@@ -36,7 +36,7 @@ bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass op
 
 #### Using `install.sh`
 
-We provide simple bash script `script.sh` for installing app from the sources.
+We provide simple bash script `install.sh` for installing app from the sources.
 
 ```bash
 # install python and cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
