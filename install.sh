@@ -251,7 +251,7 @@ confirmInstall() {
   fi
 
   show ""
-  show "You really want install latest version of $1? (y/N):" $CYAN
+  show "You really want to install the latest version of $1? (y/N):" $CYAN
 
   if ! readAnswer "N" ; then
     return 1
