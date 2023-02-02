@@ -6,7 +6,7 @@ Version:         1.9.0
 Release:         0%{?dist}
 License:         Apache License, Version 2.0
 Group:           Applications/System
-URL:             https://github.com/essentialkaos/mkcryptpasswd
+URL:             https://kaos.sh/mkcryptpasswd
 Vendor:          ESSENTIAL KAOS
 
 Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2

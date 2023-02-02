@@ -34,6 +34,14 @@ Also, you can use the latest version of utility without installation:
 bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass options here
 ```
 
+#### Using Makefile and Git
+
+```bash
+git clone https://kaos.sh/mkcryptpasswd.git
+cd mkcryptpasswd
+sudo make install
+```
+
 #### Using `install.sh`
 
 We provide simple bash script `install.sh` for installing app from the sources.
