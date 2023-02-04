@@ -59,4 +59,4 @@ jobs:
       - name: Check scripts with Shellcheck
         uses: essentialkaos/shellcheck-action@v1
         with:
-          files: install.sh SOURCES/mkcryptpasswd
+          files: SOURCES/mkcryptpasswd
