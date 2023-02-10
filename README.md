@@ -16,7 +16,7 @@
 #### From [ESSENTIAL KAOS Public Repository](https://yum.kaos.st)
 
 ```bash
-sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
+sudo yum install -y https://yum.kaos.st/kaos-repo-latest.el$(grep 'CPE_NAME' /etc/os-release | tr -d '"' | cut -d':' -f5).noarch.rpm
 sudo yum install mkcryptpasswd
 ```
 
@@ -34,23 +34,12 @@ Also, you can use the latest version of utility without installation:
 bash <(curl -fsSL https://kaos.sh/mkcryptpasswd/SOURCES/mkcryptpasswd) # pass options here
 ```
 
-#### Using `install.sh`
-
-We provide simple bash script `install.sh` for installing app from the sources.
+#### Using Makefile and Git
 
 ```bash
-# install python and cracklib-check (RHEL/CentOS) or libpam-cracklib (Debian/Ubuntu)
-
 git clone https://kaos.sh/mkcryptpasswd.git
 cd mkcryptpasswd
-
-sudo ./install.sh
-```
-
-If you have some issues with installing, try to use script in debug mode:
-
-```bash
-sudo ./install.sh --debug
+sudo make install
 ```
 
 ### Usage

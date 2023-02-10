@@ -1,22 +1,22 @@
 ################################################################################
 
-Summary:         Utility for hashing password
-Name:            mkcryptpasswd
-Version:         1.9.0
-Release:         0%{?dist}
-License:         Apache License, Version 2.0
-Group:           Applications/System
-URL:             https://github.com/essentialkaos/mkcryptpasswd
-Vendor:          ESSENTIAL KAOS
+Summary:    Utility for hashing password
+Name:       mkcryptpasswd
+Version:    1.9.1
+Release:    0%{?dist}
+License:    Apache License, Version 2.0
+Group:      Applications/System
+URL:        https://kaos.sh/mkcryptpasswd
+Vendor:     ESSENTIAL KAOS
 
-Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
+Source0:    https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 
-BuildArch:       noarch
-BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:  noarch
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:        python
+Requires:   python
 
-Provides:        %{name} = %{version}-%{release}
+Provides:   %{name} = %{version}-%{release}
 
 ################################################################################
 
@@ -41,6 +41,8 @@ install -pm 755 %{name}.8 %{buildroot}%{_mandir}/man8/
 %clean
 rm -rf %{buildroot}
 
+################################################################################
+
 %files
 %defattr(-,root,root,-)
 %doc LICENSE
@@ -50,6 +52,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sat Feb 04 2023 Anton Novojilov <andy@essentialkaos.com> - 1.9.1-0
+- Code refactoring
+
 * Sat Apr 03 2021 Anton Novojilov <andy@essentialkaos.com> - 1.9.0-0
 - Added Python 3 support
 - Updated options parser to the latest version
