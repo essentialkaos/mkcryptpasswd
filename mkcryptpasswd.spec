@@ -112,7 +112,7 @@ rm -rf %{buildroot}
 * Fri Jun 14 2013 Anton Novojilov <andy@essentialkaos.com> - 1.3.0-0
 - Fixed major bug with method args parsing
 - Some minor improvements
-- Short args suport
+- Short args support
 - Checking password strength
 - Changed license to Apache License, Version 2.0
 
