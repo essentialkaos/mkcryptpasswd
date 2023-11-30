@@ -2,7 +2,7 @@
 
 Summary:    Utility for hashing password
 Name:       mkcryptpasswd
-Version:    1.9.1
+Version:    1.9.2
 Release:    0%{?dist}
 License:    Apache License, Version 2.0
 Group:      Applications/System
@@ -14,14 +14,14 @@ Source0:    https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 BuildArch:  noarch
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:   python
+Requires:   bash python
 
 Provides:   %{name} = %{version}-%{release}
 
 ################################################################################
 
 %description
-Utility for generating encrypted passwords (can be used for /etc/shadow file)
+Utility for generating encrypted passwords (can be used for /etc/shadow file).
 
 ################################################################################
 
@@ -52,6 +52,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Thu Nov 30 2023 Anton Novojilov <andy@essentialkaos.com> - 1.9.2-0
+- Code refactoring
+
 * Sat Feb 04 2023 Anton Novojilov <andy@essentialkaos.com> - 1.9.1-0
 - Code refactoring
 
@@ -112,7 +115,7 @@ rm -rf %{buildroot}
 * Fri Jun 14 2013 Anton Novojilov <andy@essentialkaos.com> - 1.3.0-0
 - Fixed major bug with method args parsing
 - Some minor improvements
-- Short args suport
+- Short args support
 - Checking password strength
 - Changed license to Apache License, Version 2.0
 
