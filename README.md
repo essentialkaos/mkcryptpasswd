@@ -1,4 +1,4 @@
-<p align="center"><a href="#readme"><img src=".github/images/mkcryptpasswd.svg" /></a></p>
+<p align="center"><a href="#readme"><img src=".github/images/card.svg" /></a></p>
 
 <p align="center">
   <a href="https://kaos.sh/w/mkcryptpasswd/ci"><img src="https://kaos.sh/w/mkcryptpasswd/ci.svg" alt="GitHub Actions CI Status" /></a>
@@ -13,7 +13,7 @@
 
 ### Installation
 
-#### From [ESSENTIAL KAOS Public Repository](https://pkgs.kaos.st)
+#### From [ESSENTIAL KAOS Public Repository](https://kaos.sh/kaos-repo)
 
 ```bash
 sudo yum install -y https://pkgs.kaos.st/kaos-repo-latest.el$(grep 'CPE_NAME' /etc/os-release | tr -d '"' | cut -d':' -f5).noarch.rpm
