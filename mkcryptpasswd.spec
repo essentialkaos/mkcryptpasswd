@@ -2,7 +2,7 @@
 
 Summary:    Utility for hashing password
 Name:       mkcryptpasswd
-Version:    1.9.3
+Version:    1.9.4
 Release:    0%{?dist}
 License:    Apache License, Version 2.0
 Group:      Applications/System
@@ -52,6 +52,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Fri Dec 06 2024 Anton Novojilov <andy@essentialkaos.com> - 1.9.4-0
+- Improved options parsing
+
 * Tue Jun 11 2024 Anton Novojilov <andy@essentialkaos.com> - 1.9.3-0
 - Improved automatic disabling of color output usage
 
